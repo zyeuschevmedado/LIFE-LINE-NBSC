@@ -1,11 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <title>Lifeline NBSC - Emergency Rescue & Monitoring System</title>
 </head>
+
 <body>
-    
+    <div class="rescue-container" id="appRoot">
+
+        <!--HERO PART-->
+        <div class="hero-bar">
+            <div class="logo-area">
+                <img src="logo.png" alt="NBSC-LOGO" style="
+              height: 60px;
+              width: auto;
+              border-radius: 12px;
+              border: 1px solid #ff6b4a;
+              background: #0b2c27;
+              padding: 5px 12px;
+            " />
+                <div class="logo-text">
+                    <h1>LIFELINE <span style="color: red">NBSC</span></h1>
+                    <p>emergency monitoring · rescue system</p>
+                </div>
+            </div>
+            <div class="emergency-badge">
+                <i class="fas fa-siren-on"></i> 24/7 rescue standby
+            </div>
+        </div>
+        <!--HERO PART END-->
+
+        <div id="authSection">
+            <div class="main-panel">
+                <div class="auth-box">
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" data-tab="login">⟡ LOGIN</button>
+                        <button class="tab-btn" data-tab="register">⟡ REGISTER</button>
+                    </div>
+
+                    <!-- LOGIN FORM -->
+                    <div id="loginForm" class="auth-form active-form">
+                        <form id="loginFormElement">
+                            <div class="input-group">
+                                <label><i class="far fa-envelope"></i> EMAIL / USERNAME</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-user-shield"></i>
+                                    <input type="text" id="loginIdentifier"
+                                        placeholder="rescue.email@example.com or username" autocomplete="username">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fas fa-lock"></i> ACCESS CODE</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-key"></i>
+                                    <input type="password" id="loginPassword" placeholder="••••••••"
+                                        autocomplete="current-password">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-rescue"><i class="fas fa-arrow-right-to-bracket"></i>
+                                DEPLOY LOGIN</button>
+                        </form>
+                        <div class="switch-message">Not registered yet? <span class="switch-link"
+                                data-switch="register">Create rescue profile →</span></div>
+                        <div id="loginMessage"
+                            style="margin-top: 12px; font-size: 0.8rem; color: #ffb08c; text-align:center;"></div>
+                    </div>
+                    <!-- LOGIN FORM end -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 </body>
+
 </html>
