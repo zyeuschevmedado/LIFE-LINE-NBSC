@@ -1,87 +1,75 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Lifeline NBSC | Emergency Response System</title>
+  <link rel="stylesheet" href="style.css">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
 
-  <body>
 <div class="rescue-container">
   <div class="hero-bar">
     <div class="logo-area">
-      <!-- rugged emblem instead of AI glass logo -->
+        <img src="logo.png" alt="NBSC Logo" class="nbsc-logo">
       <div class="university-emblem">
         <div class="uni-name">NORTHERN BUKIDNON STATE COLLEGE</div>
-            <div class="uni-college">QUICK RESPONSE TEAM · 2023</div>
+        <div class="uni-college">QUICK RESPONSE TEAM · 2023</div>
       </div>
       <div class="logo-text">
-        <h1>LIFELINE <span style="color:#f5a266;">NBSC</span></h1>
+        
+        <h1>LIFELINE <span style="color: #f5a266">NBSC</span></h1>
         <p>emergency monitoring · rescue system</p>
       </div>
     </div>
-    <div class="emergency-badge"><i class="fa-solid fa-truck-medical"></i> 24/7 DISPATCH | ACTIVE FLOOD ALERT</div>
+    <div class="emergency-badge">
+      <i class="fa-solid fa-truck-medical"></i> 24/7 DISPATCH | ACTIVE FLOOD ALERT
+    </div>
   </div>
 
   <div id="authSection">
     <div class="main-panel">
       <div class="auth-box">
-
-
         <div class="auth-tabs">
-          <button class="tab-btn active" data-tab="login"><i class="fa-solid fa-key"></i> LOGIN</button>
-          <button class="tab-btn" data-tab="register"><i class="fa-solid fa-file-signature"></i> REGISTER</button>
+          <button class="tab-btn active" data-tab="login">
+            <i class="fa-solid fa-key"></i> LOGIN
+          </button>
+          <button class="tab-btn" data-tab="register">
+            <i class="fa-solid fa-file-signature"></i> REGISTER
+          </button>
         </div>
 
-
-
-
-
-
-
-
-
-
-        <!-- LOGIN -->
+        <!-- LOGIN FORM -->
         <div id="loginForm" class="auth-form active-form">
           <form id="loginFormElement">
             <div class="input-group">
-              <label>IDENTIFIER (EMAIL / USERNAME)</label>
+              <label>MEMBER (EMAIL / USERNAME)</label>
               <div class="input-icon">
                 <i class="fa-solid fa-user"></i>
                 <input type="text" id="loginIdentifier" placeholder="e.g., john.doe@rescue.org or username" autocomplete="username">
               </div>
             </div>
             <div class="input-group">
-              <label>ACCESS CODE</label>
+              <label>PASSWORD</label>
               <div class="input-icon">
                 <i class="fa-solid fa-lock"></i>
                 <input type="password" id="loginPassword" placeholder="••••••" autocomplete="current-password">
               </div>
             </div>
-            <button type="submit" class="btn-rescue"><i class="fa-solid fa-arrow-right-to-bracket"></i> DEPLOY LOGIN</button>
+            <button type="submit" class="btn-rescue">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> DEPLOY LOGIN
+            </button>
           </form>
-          <div class="switch-message">First time? <span class="switch-link" data-switch="register">Create emergency profile →</span></div>
-          <div id="loginMessage" style="margin-top: 14px; font-size:0.8rem; text-align:center; color:#bd6232;"></div>
+          <div class="switch-message">
+            First time?
+            <span class="switch-link" data-switch="register">Create Member Account →</span>
+          </div>
+          <div id="loginMessage" class="message-area"></div>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- REGISTER -->
+        <!-- REGISTER FORM -->
         <div id="registerForm" class="auth-form">
           <form id="registerFormElement">
             <div class="input-group">
@@ -112,31 +100,47 @@
                 <input type="password" id="regPassword" placeholder="••••••">
               </div>
             </div>
-            <button type="submit" class="btn-rescue"><i class="fa-solid fa-plus"></i> REGISTER ACCOUNT</button>
+            <button type="submit" class="btn-rescue">
+              <i class="fa-solid fa-plus"></i> REGISTER ACCOUNT
+            </button>
           </form>
-          <div class="switch-message">Already registered? <span class="switch-link" data-switch="login">Sign in →</span></div>
-          <div id="registerMessage" style="margin-top: 14px; font-size:0.8rem; text-align:center; color:#bd6232;"></div>
+          <div class="switch-message">
+            Already registered?
+            <span class="switch-link" data-switch="login">Sign in →</span>
+          </div>
+          <div id="registerMessage" class="message-area"></div>
         </div>
       </div>
 
       <div class="info-side">
         <h3><i class="fa-solid fa-hand-holding-heart"></i> RESCUE UNIT</h3>
-        <p style="font-weight:500; color:#584838;">Real-time emergency coordination & disaster response network.</p>
+        <p style="font-weight: 500; color: #584838">
+          Real-time emergency coordination & disaster response network.
+        </p>
         <div class="rescue-stats">
-          <div class="stat-item"><span class="stat-num">1,284</span> Lives saved (May)</div>
-          <div class="stat-item"><span class="stat-num">42</span> Active rescue teams</div>
-          <div class="stat-item"><span class="stat-num">24/7</span> Rapid dispatch</div>
+          <div class="stat-item">
+            <span class="stat-num">1,284</span> Lives saved (May)
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">42</span> Active rescue teams
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">24/7</span> Rapid dispatch
+          </div>
         </div>
         <div class="help-quote">
-          <i class="fa-solid fa-quote-left" style="margin-right: 8px;"></i> "Lifeline NBSC connects volunteers, emergency units and real-time alerts. Join us — every second matters."
+          <i class="fa-solid fa-quote-left" style="margin-right: 8px"></i>
+          "Lifeline NBSC connects volunteers, emergency units and real-time alerts. Join us — every second matters."
         </div>
       </div>
     </div>
   </div>
 
   <footer>
-    <i class="fa-solid fa-shield-haltered"></i> Lifeline NBSC — Bukkali State University | emergency response system
+    <i class="fa-solid fa-shield-haltered"></i> Lifeline NBSC — Northern Bukidnon State College | emergency response system
   </footer>
 </div>
-  </body>
+
+<script src="script.js"></script>
+</body>
 </html>
