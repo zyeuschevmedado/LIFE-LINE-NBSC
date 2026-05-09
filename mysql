@@ -1,0 +1,124 @@
+USE lifeline_nbsc;
+Database changed
+MariaDB [lifeline_nbsc]>
+MariaDB [lifeline_nbsc]> DROP TABLE IF EXISTS incident_assignments;
+Query OK, 0 rows affected, 1 warning (0.011 sec)
+
+MariaDB [lifeline_nbsc]> DROP TABLE IF EXISTS activity_logs;
+Query OK, 0 rows affected, 1 warning (0.001 sec)
+
+MariaDB [lifeline_nbsc]> DROP TABLE IF EXISTS incidents;
+Query OK, 0 rows affected, 1 warning (0.001 sec)
+
+MariaDB [lifeline_nbsc]> DROP TABLE IF EXISTS rescue_teams;
+Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+MariaDB [lifeline_nbsc]> DROP TABLE IF EXISTS users;
+Query OK, 0 rows affected, 1 warning (0.002 sec)
+
+MariaDB [lifeline_nbsc]> CREATE TABLE users (
+    ->     user_id INT PRIMARY KEY AUTO_INCREMENT,
+    ->     fullname VARCHAR(100) NOT NULL,
+    ->     email VARCHAR(100) UNIQUE NOT NULL,
+    ->     username VARCHAR(50) UNIQUE NOT NULL,
+    ->     password VARCHAR(255) NOT NULL,
+    ->     role ENUM('admin', 'responder', 'viewer') DEFAULT 'responder',
+    ->     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    -> );
+Query OK, 0 rows affected (0.039 sec)
+
+MariaDB [lifeline_nbsc]> CREATE TABLE rescue_teams (
+    ->     team_id INT PRIMARY KEY AUTO_INCREMENT,
+    ->     team_name VARCHAR(100) NOT NULL,
+    ->     leader_name VARCHAR(100),
+    ->     contact_number VARCHAR(20),
+    ->     status ENUM('available', 'deployed', 'resting') DEFAULT 'available'
+    -> );
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [lifeline_nbsc]> CREATE TABLE incidents (
+    ->     incident_id INT PRIMARY KEY AUTO_INCREMENT,
+    ->     title VARCHAR(200) NOT NULL,
+    ->     description TEXT,
+    ->     location VARCHAR(255) NOT NULL,
+    ->     teams_assigned VARCHAR(100),
+    ->     affected_count VARCHAR(100),
+    ->     severity ENUM('critical', 'high', 'medium', 'low') DEFAULT 'medium',
+    ->     status ENUM('active', 'monitoring', 'resolved') DEFAULT 'active',
+    ->     created_by INT,
+    ->     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (created_by) REFERENCES users(user_id) ON DELETE SET NULL
+    -> );
+Query OK, 0 rows affected (0.037 sec)
+
+MariaDB [lifeline_nbsc]> CREATE TABLE incident_assignments (
+    ->     assignment_id INT PRIMARY KEY AUTO_INCREMENT,
+    ->     incident_id INT,
+    ->     team_id INT,
+    ->     assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (incident_id) REFERENCES incidents(incident_id) ON DELETE CASCADE,
+    ->     FOREIGN KEY (team_id) REFERENCES rescue_teams(team_id) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.024 sec)
+
+MariaDB [lifeline_nbsc]> CREATE TABLE activity_logs (
+    ->     log_id INT PRIMARY KEY AUTO_INCREMENT,
+    ->     user_id INT,
+    ->     action VARCHAR(100),
+    ->     incident_id INT,
+    ->     ip_address VARCHAR(45),
+    ->     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL,
+    ->     FOREIGN KEY (incident_id) REFERENCES incidents(incident_id) ON DELETE SET NULL
+    -> );
+Query OK, 0 rows affected (0.035 sec)
+
+MariaDB [lifeline_nbsc]> INSERT INTO users (fullname, email, username, password, role) VALUES
+    -> ('Alex Rivera', 'captain@lifeline.org', 'rescuelead', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
+    -> ('Maria Santiago', 'rescue@example.com', 'firstresponder', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'responder'),
+    -> ('John Mercado', 'john@rescue.org', 'johnmercy', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'responder');
+Query OK, 3 rows affected (0.016 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [lifeline_nbsc]> INSERT INTO rescue_teams (team_name, leader_name, contact_number, status) VALUES
+    -> ('Alpha Squad', 'John Mercado', '09123456789', 'deployed'),
+    -> ('Bravo Unit', 'Sarah Reyes', '09123456790', 'available'),
+    -> ('Charlie Team', 'Miguel Santos', '09123456791', 'available'),
+    -> ('Delta Force', 'Elena Cruz', '09123456792', 'deployed');
+Query OK, 4 rows affected (0.004 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [lifeline_nbsc]> INSERT INTO incidents (title, description, location, teams_assigned, affected_count, severity, status, created_by) VALUES
+    -> ('Flash Flood - North Sector', 'Rising waters, evacuation ongoing. 3 feet deep in main road.', 'Barangay 5, Northern Area', '3 teams', '23 families', 'critical', 'active', 1),
+    -> ('Landslide Alert', 'Soil erosion detected on east ridge. Continuous monitoring required.', 'Eastern Trail, Mountain View', '2 scout teams', 'Evacuation zone', 'high', 'monitoring', 1),
+    -> ('Structure Fire', 'Residential area fire, 3 houses affected.', 'Downtown District', '4 fire trucks', '5 families', 'critical', 'resolved', 2),
+    -> ('Typhoon Preparations', 'Pre-emptive evacuation in low-lying areas.', 'Coastal Barangays', '6 teams', '200+ families', 'high', 'active', 2),
+    -> ('Medical Emergency', 'Mass casualty incident at school', 'Central School', '2 ambulance teams', '15 injured', 'medium', 'active', 3);
+Query OK, 5 rows affected (0.005 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [lifeline_nbsc]>
+MariaDB [lifeline_nbsc]> INSERT INTO incident_assignments (incident_id, team_id) VALUES
+    -> (1, 1), (1, 3), (2, 2), (3, 4), (4, 1), (4, 2), (4, 3), (5, 2);
+Query OK, 8 rows affected (0.004 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+MariaDB [lifeline_nbsc]> INSERT INTO activity_logs (user_id, action, incident_id, ip_address) VALUES
+    -> (1, 'login', NULL, '192.168.1.1'),
+    -> (1, 'create', 1, '192.168.1.1'),
+    -> (2, 'create', 4, '192.168.1.2'),
+    -> (1, 'update', 2, '192.168.1.1'),
+    -> (2, 'delete', NULL, '192.168.1.2');
+Query OK, 5 rows affected (0.005 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [lifeline_nbsc]> SELECT 'Users table:' as Status, COUNT(*) as Count FROM users
+    -> UNION ALL
+    -> SELECT 'Incidents table:', COUNT(*) FROM incidents
+    -> UNION ALL
+    -> SELECT 'Rescue Teams:', COUNT(*) FROM rescue_teams
+    -> UNION ALL
+    -> SELECT 'Assignments:', COUNT(*) FROM incident_assignments
+    -> UNION ALL
+    -> SELECT 'Activity Logs:', COUNT(*) FROM activity_logs;
