@@ -1,47 +1,38 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
-    <div class="rescue-container">
-        <div class="hero-bar">
-            <div class="logo-area">
-                <div class="university-emblem">
-                    <img src="logo.png" alt="Bukkali State University Logo" style="
-                height: 60px;
-                width: auto;
-                border-radius: 12px;
-                border: 1px solid #ff4a4a;
-                background: #0b0d2c;
-                padding: 5px 12px;
-              " />
-                    <div class="uni-name">NORTHERN BUKIDNON STATE COLLEGE</div>
-                    <div class="uni-college">QUICK RESPONSE TEAM · 2023</div>
-                </div>
-                <div class="logo-text">
-                    <h1>LIFELINE <span style="color: #0400ff">NBSC</span></h1>
-                    <p>emergency monitoring · rescue system</p>
-                </div>
-            </div>
-            <div class="emergency-badge">
-                <i class="fa-solid fa-truck-medical"></i> 24/7 DISPATCH | ACTIVE FLOOD
-                ALERT
-            </div>
+  <body>
+<div class="rescue-container">
+  <div class="hero-bar">
+    <div class="logo-area">
+      <!-- rugged emblem instead of AI glass logo -->
+      <div class="university-emblem">
+        <div class="uni-name">NORTHERN BUKIDNON STATE COLLEGE</div>
+            <div class="uni-college">QUICK RESPONSE TEAM · 2023</div>
+      </div>
+      <div class="logo-text">
+        <h1>LIFELINE <span style="color:#f5a266;">NBSC</span></h1>
+        <p>emergency monitoring · rescue system</p>
+      </div>
+    </div>
+    <div class="emergency-badge"><i class="fa-solid fa-truck-medical"></i> 24/7 DISPATCH | ACTIVE FLOOD ALERT</div>
+  </div>
 
-            <div id="authSection">
+  <div id="authSection">
+    <div class="main-panel">
+      <div class="auth-box">
 
-                <div class="main-panel">
-                    <div class="auth-box">
-            <div class="auth-tabs">
+
+        <div class="auth-tabs">
           <button class="tab-btn active" data-tab="login"><i class="fa-solid fa-key"></i> LOGIN</button>
           <button class="tab-btn" data-tab="register"><i class="fa-solid fa-file-signature"></i> REGISTER</button>
-           </div>
+        </div>
 
 
 
@@ -52,7 +43,7 @@
 
 
 
-                   <!-- LOGIN -->
+        <!-- LOGIN -->
         <div id="loginForm" class="auth-form active-form">
           <form id="loginFormElement">
             <div class="input-group">
@@ -74,18 +65,78 @@
           <div class="switch-message">First time? <span class="switch-link" data-switch="register">Create emergency profile →</span></div>
           <div id="loginMessage" style="margin-top: 14px; font-size:0.8rem; text-align:center; color:#bd6232;"></div>
         </div>
-           
 
 
-                    </div>
-                </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- REGISTER -->
+        <div id="registerForm" class="auth-form">
+          <form id="registerFormElement">
+            <div class="input-group">
+              <label>FULL NAME</label>
+              <div class="input-icon">
+                <i class="fa-solid fa-id-card"></i>
+                <input type="text" id="regFullname" placeholder="e.g., Maria Santiago">
+              </div>
             </div>
-
-
-
+            <div class="input-group">
+              <label>EMAIL ADDRESS</label>
+              <div class="input-icon">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="regEmail" placeholder="rescue@example.com">
+              </div>
+            </div>
+            <div class="input-group">
+              <label>USERNAME</label>
+              <div class="input-icon">
+                <i class="fa-solid fa-tag"></i>
+                <input type="text" id="regUsername" placeholder="firstresponder">
+              </div>
+            </div>
+            <div class="input-group">
+              <label>PASSWORD (min 6 chars)</label>
+              <div class="input-icon">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="regPassword" placeholder="••••••">
+              </div>
+            </div>
+            <button type="submit" class="btn-rescue"><i class="fa-solid fa-plus"></i> REGISTER ACCOUNT</button>
+          </form>
+          <div class="switch-message">Already registered? <span class="switch-link" data-switch="login">Sign in →</span></div>
+          <div id="registerMessage" style="margin-top: 14px; font-size:0.8rem; text-align:center; color:#bd6232;"></div>
         </div>
-    </div>
-</body>
+      </div>
 
+      <div class="info-side">
+        <h3><i class="fa-solid fa-hand-holding-heart"></i> RESCUE UNIT</h3>
+        <p style="font-weight:500; color:#584838;">Real-time emergency coordination & disaster response network.</p>
+        <div class="rescue-stats">
+          <div class="stat-item"><span class="stat-num">1,284</span> Lives saved (May)</div>
+          <div class="stat-item"><span class="stat-num">42</span> Active rescue teams</div>
+          <div class="stat-item"><span class="stat-num">24/7</span> Rapid dispatch</div>
+        </div>
+        <div class="help-quote">
+          <i class="fa-solid fa-quote-left" style="margin-right: 8px;"></i> "Lifeline NBSC connects volunteers, emergency units and real-time alerts. Join us — every second matters."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <i class="fa-solid fa-shield-haltered"></i> Lifeline NBSC — Bukkali State University | emergency response system
+  </footer>
+</div>
+  </body>
 </html>
