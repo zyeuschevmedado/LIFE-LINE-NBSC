@@ -32,17 +32,10 @@ body::before {
   z-index: 2;
   width: 100%;
   max-width: 1280px;
-  background-image: linear-gradient(
-    0deg,
-    rgba(210, 190, 165, 0.2) 1px,
-    transparent 1px
-  );
+  background-image: linear-gradient(0deg, rgba(210, 190, 165, 0.2) 1px, transparent 1px);
   background-size: 100% 3px;
   border-radius: 24px 24px 20px 20px;
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.4),
-    0 0 0 1px #5e2e2e inset,
-    0 0 0 2px #897eb7 inset;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 0 0 1px #5e2e2e inset, 0 0 0 2px #897eb7 inset;
   overflow: hidden;
 }
 
@@ -65,15 +58,24 @@ body::before {
   flex-wrap: wrap;
 }
 
+.nbsc-logo {
+  height: 60px;
+  width: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid #bc4242;
+  background: white;
+  padding: 4px;
+  object-fit: contain;
+}
+
 .university-emblem {
   background: #e7bdbf;
   border-radius: 40px 40px 40px 12px;
   padding: 8px 16px;
   border-left: 6px solid #bc4242;
   border-bottom: 3px solid #7c3a51;
-  box-shadow:
-    inset 0 1px 2px rgba(255, 255, 200, 0.6),
-    0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 200, 0.6), 0 2px 5px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
@@ -140,11 +142,7 @@ body::before {
   flex: 1;
   padding: 32px 24px;
   background: #e7dcc8;
-  background-image: radial-gradient(
-    circle at 10% 20%,
-    rgba(160, 120, 80, 0.08) 2%,
-    transparent 2.5%
-  );
+  background-image: radial-gradient(circle at 10% 20%, rgba(160, 120, 80, 0.08) 2%, transparent 2.5%);
   background-size: 22px 22px;
 }
 
@@ -278,9 +276,7 @@ body::before {
   padding: 18px 18px;
   margin: 28px 0;
   border: 1px solid #d44848;
-  box-shadow:
-    inset 0 0 0 1px #fffef7,
-    0 4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 0 0 1px #fffef7, 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .stat-item {
@@ -323,7 +319,6 @@ footer {
   font-family: monospace;
 }
 
-/* Form visibility */
 .auth-form {
   display: none;
 }
@@ -332,7 +327,6 @@ footer {
   display: block;
 }
 
-/* Message area styling */
 .message-area {
   margin-top: 14px;
   font-size: 0.8rem;
@@ -342,7 +336,6 @@ footer {
   transition: all 0.2s;
 }
 
-/* Demo hint styling */
 .demo-hint {
   margin-top: 18px;
   font-size: 0.7rem;
@@ -353,20 +346,6 @@ footer {
   font-family: monospace;
 }
 
-/* Add this to your existing style.css */
-
-.nbsc-logo {
-  height: 60px;
-  width: auto;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  border: 2px solid #bc4242;
-  background: white;
-  padding: 4px;
-  object-fit: contain;
-}
-
-/* If you want the logo to be responsive on mobile */
 @media (max-width: 768px) {
   .nbsc-logo {
     height: 45px;

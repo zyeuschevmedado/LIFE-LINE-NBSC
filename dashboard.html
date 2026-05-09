@@ -6,161 +6,7 @@
   <title>LIFELINE NBSC - EMERGENCY DASHBOARD</title>
   <link rel="stylesheet" href="css/dash.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* dashboard extra styles - rough, functional, no glassmorph */
-    .dash-container {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .dash-header-bar {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      background: #2d3a2a;
-      padding: 16px 28px;
-      border-bottom: 5px solid #bc5a3a;
-    }
-    .dash-title h2 {
-      color: #f5e6d3;
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-    .dash-title p {
-      color: #dbbc9b;
-      font-size: 0.7rem;
-    }
-    .user-panel {
-      background: #1f2a1c;
-      padding: 6px 20px;
-      border-radius: 50px;
-      display: flex;
-      gap: 18px;
-      align-items: center;
-    }
-    .user-name {
-      color: #f5a266;
-      font-weight: bold;
-    }
-    .logout-button {
-      background: #a54838;
-      border: none;
-      padding: 6px 18px;
-      border-radius: 30px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
-      gap: 18px;
-      padding: 28px;
-    }
-    .stat-piece {
-      background: #f2ead8;
-      border-left: 8px solid #bc5a3a;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 3px 3px 0px #bba88a;
-    }
-    .stat-piece i {
-      font-size: 2rem;
-      color: #bc5a3a;
-    }
-    .stat-number-lg {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #3d2b1a;
-    }
-    .crud-area {
-      background: #f2ead8;
-      margin: 0 28px 28px 28px;
-      padding: 24px;
-      border: 1px solid #cfbc9a;
-    }
-    .section-header {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #4a3624;
-      border-left: 6px solid #bc5a3a;
-      padding-left: 14px;
-      margin-bottom: 20px;
-    }
-    .form-row-crud {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-    .form-row-crud input, .form-row-crud select, .form-row-crud textarea {
-      flex: 1;
-      padding: 12px;
-      background: #fffaf0;
-      border: 1px solid #cbb48a;
-      font-family: monospace;
-    }
-    .crud-btn {
-      background: #bc5a3a;
-      border: none;
-      padding: 10px 24px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .alert-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fffef7;
-      margin-top: 20px;
-    }
-    .alert-table th, .alert-table td {
-      border: 1px solid #dac29c;
-      padding: 12px;
-      text-align: left;
-      font-size: 0.85rem;
-    }
-    .alert-table th {
-      background: #3d5540;
-      color: #ffefcf;
-    }
-    .badge-critical { background: #bc3a2a; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; }
-    .badge-high { background: #e0843a; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; }
-    .badge-medium { background: #e8b45a; color: #2c2c1a; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; }
-    .badge-low { background: #4f7a5a; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; }
-    .status-active { background: #bc3a2a; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; }
-    .status-monitor { background: #e8b45a; color: #2c2c1a; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; }
-    .status-resolved { background: #4f7a5a; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; }
-    .edit-btn { background: #e8b45a; border: none; padding: 4px 12px; cursor: pointer; margin-right: 6px; }
-    .del-btn { background: #bc3a2a; border: none; padding: 4px 12px; color: white; cursor: pointer; }
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top:0;left:0;width:100%;height:100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 999;
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-box {
-      background: #f2ead8;
-      padding: 28px;
-      width: 90%;
-      max-width: 550px;
-      border: 6px solid #8b694a;
-    }
-    .footer-dash {
-      background: #2a2a1c;
-      padding: 18px;
-      text-align: center;
-      color: #bba88a;
-      font-family: monospace;
-      margin-top: 28px;
-    }
-    @media (max-width: 700px) {
-      .alert-table th, .alert-table td { padding: 6px; font-size: 0.7rem;}
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -192,7 +38,7 @@
     </div>
   </div>
 
-  <!-- stats row -->
+  <!-- Stats Row -->
   <div class="stats-row">
     <div class="stat-piece"><i class="fa-solid fa-bell"></i><div class="stat-number-lg" id="totalIncidents">0</div><div>total incidents</div></div>
     <div class="stat-piece"><i class="fa-solid fa-bolt"></i><div class="stat-number-lg" id="activeIncidents">0</div><div>active alerts</div></div>
@@ -200,7 +46,28 @@
     <div class="stat-piece"><i class="fa-solid fa-check"></i><div class="stat-number-lg" id="resolvedCount">0</div><div>resolved cases</div></div>
   </div>
 
-  <!-- CRUD SECTION -->
+  <!-- Charts Row - Chart.js Integration -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <h4><i class="fa-solid fa-chart-pie"></i> Incidents by Severity</h4>
+      <canvas id="severityChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h4><i class="fa-solid fa-chart-line"></i> Incidents by Status</h4>
+      <canvas id="statusChart"></canvas>
+    </div>
+  </div>
+
+  <!-- SQL JOIN Information Panel -->
+  <div class="sql-info">
+    <i class="fa-solid fa-database"></i> <strong>SQL JOIN DEMONSTRATION</strong><br>
+    <code>INNER JOIN</code> - Shows incidents with creator info (matches both tables)<br>
+    <code>LEFT JOIN</code> - Shows all users even without incidents<br>
+    <code>RIGHT JOIN</code> - Shows all incidents even without assignments<br>
+    <code>FULL OUTER JOIN</code> - Simulated via UNION of LEFT and RIGHT JOINs
+  </div>
+
+  <!-- CREATE Incident Section -->
   <div class="crud-area">
     <div class="section-header"><i class="fa-solid fa-plus"></i> CREATE NEW INCIDENT</div>
     <div class="form-row-crud">
@@ -228,12 +95,46 @@
     <button id="createIncidentBtn" class="crud-btn"><i class="fa-solid fa-save"></i> CREATE INCIDENT</button>
   </div>
 
+  <!-- Search and Sort Bar -->
   <div class="crud-area">
-    <div class="section-header"><i class="fa-solid fa-list"></i> INCIDENT LIST (CRUD)</div>
+    <div class="section-header"><i class="fa-solid fa-magnifying-glass"></i> SEARCH & SORT</div>
+    <div class="search-sort-bar">
+      <div class="search-box">
+        <i class="fa-solid fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search by title, location, or description...">
+      </div>
+      <select id="sortSelect" class="sort-select">
+        <option value="date_desc">Sort by Date (Newest)</option>
+        <option value="date_asc">Sort by Date (Oldest)</option>
+        <option value="severity_critical">Sort by Severity (Critical first)</option>
+        <option value="severity_low">Sort by Severity (Low first)</option>
+        <option value="title_asc">Sort by Title (A-Z)</option>
+        <option value="title_desc">Sort by Title (Z-A)</option>
+      </select>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">ALL</button>
+        <button class="filter-btn" data-filter="active">ACTIVE</button>
+        <button class="filter-btn" data-filter="monitoring">MONITORING</button>
+        <button class="filter-btn" data-filter="resolved">RESOLVED</button>
+      </div>
+    </div>
+
+    <!-- READ Incident Table -->
     <div style="overflow-x: auto;">
       <table class="alert-table" id="incidentTable">
         <thead>
-          <tr><th>ID</th><th>TITLE</th><th>DESC</th><th>LOCATION</th><th>TEAMS</th><th>AFFECTED</th><th>SEVERITY</th><th>STATUS</th><th>CREATED</th><th>ACTIONS</th></tr>
+          <tr>
+            <th data-sort="id">ID <i class="fa-solid fa-arrow-up-wide-short"></i></th>
+            <th data-sort="title">TITLE <i class="fa-solid fa-arrow-up-wide-short"></i></th>
+            <th>DESC</th>
+            <th data-sort="location">LOCATION <i class="fa-solid fa-arrow-up-wide-short"></i></th>
+            <th>TEAMS</th>
+            <th>AFFECTED</th>
+            <th data-sort="severity">SEVERITY <i class="fa-solid fa-arrow-up-wide-short"></i></th>
+            <th data-sort="status">STATUS <i class="fa-solid fa-arrow-up-wide-short"></i></th>
+            <th data-sort="date">CREATED <i class="fa-solid fa-arrow-up-wide-short"></i></th>
+            <th>ACTIONS</th>
+          </tr>
         </thead>
         <tbody id="incidentTableBody">
           <tr><td colspan="10" style="text-align:center">loading incidents...</td></tr>
@@ -247,7 +148,7 @@
   </div>
 </div>
 
-<!-- EDIT MODAL (handmade) -->
+<!-- EDIT MODAL -->
 <div id="editModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="border-left: 5px solid #bc5a3a; padding-left: 12px;">✏️ EDIT INCIDENT</h3>

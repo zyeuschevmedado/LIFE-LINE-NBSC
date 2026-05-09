@@ -1,261 +1,257 @@
+// API Base URL - Try different options if needed
+// Option 1: Standard XAMPP setup
+const API_BASE = 'http://localhost/LIFELINE-NBSC/backend/';
+// Option 2: If using port 8080
+// const API_BASE = 'http://localhost:8080/lifeline_nbsc/backend/';
+// Option 3: Using 127.0.0.1 instead of localhost
+// const API_BASE = 'http://127.0.0.1/lifeline_nbsc/backend/';
 
-let users = [];
-
-// Load users from localStorage
-function loadUsersFromStorage() {
-  const stored = localStorage.getItem("nbsc_rescue_users");
-  if (stored) {
-    users = JSON.parse(stored);
-  } else {
-    users = [
-      {
-        fullname: "Alex Rivera",
-        email: "captain@lifeline.org",
-        username: "rescuelead",
-        password: "lifeline123",
-      },
-      {
-        fullname: "Maria Santiago",
-        email: "rescue@example.com",
-        username: "firstresponder",
-        password: "rescue123",
-      },
-    ];
-    saveUsersToStorage();
-  }
-}
-
-// Save users to localStorage
-function saveUsersToStorage() {
-  localStorage.setItem("nbsc_rescue_users", JSON.stringify(users));
-}
-
-// Find user by username or email
-function findUserByIdentifier(identifier) {
-  return users.find((u) => u.username === identifier || u.email === identifier);
-}
-
-// Register new user
-function registerUser(fullname, email, username, password) {
-  if (!fullname || !email || !username || !password) {
-    return { success: false, msg: "All fields required." };
-  }
-  if (password.length < 6) {
-    return { success: false, msg: "Password must be at least 6 characters." };
-  }
-  if (users.find((u) => u.email === email)) {
-    return { success: false, msg: "Email already registered." };
-  }
-  if (users.find((u) => u.username === username)) {
-    return { success: false, msg: "Username already taken." };
-  }
-
-  const newUser = { fullname, email, username, password };
-  users.push(newUser);
-  saveUsersToStorage();
-  return { success: true, msg: "Registration successful! You can now log in." };
-}
-
-// Login user
-function loginUser(identifier, password) {
-  const user = findUserByIdentifier(identifier);
-  if (!user) {
-    return {
-      success: false,
-      msg: "No account found with that email/username.",
-    };
-  }
-  if (user.password !== password) {
-    return { success: false, msg: "Incorrect password. Try again." };
-  }
-  return { success: true, msg: "Login successful!", user: user };
-}
-
-// DOM Elements
-const loginFormDiv = document.getElementById("loginForm");
-const registerFormDiv = document.getElementById("registerForm");
-const tabBtns = document.querySelectorAll(".tab-btn");
+// Message display elements
 const loginMsg = document.getElementById("loginMessage");
-const regMsg = document.getElementById("registerMessage");
+const registerMsg = document.getElementById("registerMessage");
 
-// Show message helper
-function showMessage(element, message, isError = true) {
-  if (!element) return;
-  element.innerHTML = message;
-  element.style.color = isError ? "#bd6232" : "#2e7d64";
-  element.style.backgroundColor = isError
-    ? "rgba(189, 98, 50, 0.1)"
-    : "rgba(46, 125, 100, 0.1)";
-
-  setTimeout(() => {
-    if (element) {
-      element.innerHTML = "";
-      element.style.backgroundColor = "transparent";
+async function apiRequest(endpoint, method, data = null) {
+    const options = {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    };
+    if (data) {
+        options.body = JSON.stringify(data);
     }
-  }, 3000);
+    
+    try {
+        const url = `${API_BASE}${endpoint}`;
+        console.log('Fetching:', url); // Debug: See what URL is being called
+        
+        const response = await fetch(url, options);
+        
+        if (!response.ok) {
+            console.error('HTTP Error:', response.status, response.statusText);
+            return { success: false, message: `HTTP ${response.status}: ${response.statusText}` };
+        }
+        
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('API Error:', error);
+        return { success: false, message: 'Connection error. Make sure XAMPP is running.' };
+    }
 }
 
-// Switch between login and register tabs
-function switchTab(tabId) {
-  tabBtns.forEach((btn) => {
-    if (btn.getAttribute("data-tab") === tabId) {
-      btn.classList.add("active");
-    } else {
-      btn.classList.remove("active");
-    }
-  });
-
-  if (tabId === "login") {
-    loginFormDiv.classList.add("active-form");
-    registerFormDiv.classList.remove("active-form");
-  } else {
-    registerFormDiv.classList.add("active-form");
-    loginFormDiv.classList.remove("active-form");
-  }
-
-  if (loginMsg) loginMsg.innerHTML = "";
-  if (regMsg) regMsg.innerHTML = "";
+async function loginUser(identifier, password) {
+    return await apiRequest('auth.php', 'POST', { 
+        action: 'login', 
+        identifier: identifier, 
+        password: password 
+    });
 }
 
-// Clear form fields
-function clearForms() {
-  const loginId = document.getElementById("loginIdentifier");
-  const loginPw = document.getElementById("loginPassword");
-  const regFull = document.getElementById("regFullname");
-  const regEmail = document.getElementById("regEmail");
-  const regUser = document.getElementById("regUsername");
-  const regPw = document.getElementById("regPassword");
+async function registerUser(fullname, email, username, password) {
+    return await apiRequest('auth.php', 'POST', {
+        action: 'register',
+        fullname: fullname,
+        email: email,
+        username: username,
+        password: password
+    });
+}
 
-  if (loginId) loginId.value = "";
-  if (loginPw) loginPw.value = "";
-  if (regFull) regFull.value = "";
-  if (regEmail) regEmail.value = "";
-  if (regUser) regUser.value = "";
-  if (regPw) regPw.value = "";
+async function checkSession() {
+    try {
+        const response = await fetch(`${API_BASE}auth.php?action=check`, {
+            credentials: 'include'
+        });
+        const data = await response.json();
+        if (data.logged_in) {
+            window.location.href = "dashboard.html";
+            return true;
+        }
+    } catch(e) {
+        console.log('Session check failed:', e);
+        // If backend fails, fallback to localStorage
+        const session = localStorage.getItem("lifeline_session");
+        if (session) {
+            window.location.href = "dashboard.html";
+        }
+    }
+    return false;
+}
+
+// Helper function to show messages
+function showMessage(element, message, isError = false) {
+    if (!element) return;
+    element.innerHTML = message;
+    element.style.color = isError ? '#bc3a2a' : '#4f7a5a';
+    element.style.backgroundColor = isError ? '#ffe0e0' : '#e0ffe0';
+    element.style.padding = '8px 12px';
+    element.style.borderRadius = '6px';
+    element.style.display = 'block';
+    
+    // Clear message after 5 seconds
+    setTimeout(() => {
+        if (element) {
+            element.innerHTML = '';
+            element.style.backgroundColor = 'transparent';
+            element.style.display = 'none';
+        }
+    }, 5000);
+}
+
+// Tab switching functionality
+function initTabs() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    
+    if (!tabBtns.length) return;
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+            
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if (tab === 'login') {
+                loginForm.classList.add('active-form');
+                registerForm.classList.remove('active-form');
+            } else {
+                loginForm.classList.remove('active-form');
+                registerForm.classList.add('active-form');
+            }
+        });
+    });
+    
+    const switchLinks = document.querySelectorAll('.switch-link');
+    switchLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const targetTab = link.dataset.switch;
+            const targetBtn = document.querySelector(`.tab-btn[data-tab="${targetTab}"]`);
+            if (targetBtn) targetBtn.click();
+        });
+    });
 }
 
 // Login submit handler
-function onLoginSubmit(e) {
-  e.preventDefault();
-
-  const identifier = document.getElementById("loginIdentifier").value.trim();
-  const password = document.getElementById("loginPassword").value;
-
-  if (!identifier || !password) {
-    showMessage(
-      loginMsg,
-      "❌ Please enter both Email and password.",
-      true,
-    );
-    return;
-  }
-
-  const result = loginUser(identifier, password);
-
-  if (result.success) {
-    showMessage(
-      loginMsg,
-      "✅ " + result.msg + " Welcome, " + result.user.fullname + "!",
-      false,
-    );
-    localStorage.setItem("nbsc_rescue_session", JSON.stringify(result.user));
-    clearForms();
-  } else {
-    showMessage(loginMsg, "❌ " + result.msg, true);
-  }
+async function onLoginSubmit(e) {
+    e.preventDefault();
+    const identifier = document.getElementById("loginIdentifier").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    
+    if (!identifier || !password) {
+        showMessage(loginMsg, "❌ Please enter both Email/Username and password.", true);
+        return;
+    }
+    
+    const submitBtn = document.querySelector('#loginFormElement .btn-rescue');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> LOGGING IN...';
+    submitBtn.disabled = true;
+    
+    const result = await loginUser(identifier, password);
+    
+    submitBtn.innerHTML = originalText;
+    submitBtn.disabled = false;
+    
+    if (result.success) {
+        showMessage(loginMsg, "✅ " + result.message, false);
+        localStorage.setItem("lifeline_session", JSON.stringify(result.user));
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 1000);
+    } else {
+        showMessage(loginMsg, "❌ " + result.message, true);
+    }
 }
 
 // Register submit handler
-function onRegisterSubmit(e) {
-  e.preventDefault();
-
-  const fullname = document.getElementById("regFullname").value.trim();
-  const email = document.getElementById("regEmail").value.trim();
-  const username = document.getElementById("regUsername").value.trim();
-  const password = document.getElementById("regPassword").value;
-
-  const result = registerUser(fullname, email, username, password);
-
-  if (result.success) {
-    showMessage(regMsg, "✅ " + result.msg, false);
-
-    setTimeout(() => {
-      switchTab("login");
-      const loginId = document.getElementById("loginIdentifier");
-      if (loginId) loginId.value = email;
-      if (regMsg) regMsg.innerHTML = "";
-    }, 1500);
-  } else {
-    showMessage(regMsg, "⚠️ " + result.msg, true);
-  }
+async function onRegisterSubmit(e) {
+    e.preventDefault();
+    const fullname = document.getElementById("regFullname").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const username = document.getElementById("regUsername").value.trim();
+    const password = document.getElementById("regPassword").value;
+    
+    if (!fullname || !email || !username || !password) {
+        showMessage(registerMsg, "❌ All fields are required.", true);
+        return;
+    }
+    
+    if (password.length < 6) {
+        showMessage(registerMsg, "❌ Password must be at least 6 characters.", true);
+        return;
+    }
+    
+    if (!email.includes('@')) {
+        showMessage(registerMsg, "❌ Please enter a valid email address.", true);
+        return;
+    }
+    
+    const submitBtn = document.querySelector('#registerFormElement .btn-rescue');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> REGISTERING...';
+    submitBtn.disabled = true;
+    
+    const result = await registerUser(fullname, email, username, password);
+    
+    submitBtn.innerHTML = originalText;
+    submitBtn.disabled = false;
+    
+    if (result.success) {
+        showMessage(registerMsg, "✅ " + result.message + " Please login.", false);
+        document.getElementById("regFullname").value = "";
+        document.getElementById("regEmail").value = "";
+        document.getElementById("regUsername").value = "";
+        document.getElementById("regPassword").value = "";
+        
+        setTimeout(() => {
+            const loginTab = document.querySelector('.tab-btn[data-tab="login"]');
+            if (loginTab) loginTab.click();
+        }, 2000);
+    } else {
+        showMessage(registerMsg, "❌ " + result.message, true);
+    }
 }
 
-// Check existing session on page load
-function checkSession() {
-  const session = localStorage.getItem("nbsc_rescue_session");
-  if (session) {
-    const user = JSON.parse(session);
-    setTimeout(() => {
-      showMessage(
-        loginMsg,
-        "👋 Welcome back, " + user.fullname + "! You are logged in.",
-        false,
-      );
-    }, 100);
-  }
+// Test backend connection on page load
+async function testBackendConnection() {
+    try {
+        const response = await fetch(`${API_BASE}test.php`);
+        const data = await response.json();
+        console.log('Backend test:', data);
+        if (data.status === 'ok') {
+            console.log('✅ Backend is reachable!');
+            return true;
+        }
+    } catch(e) {
+        console.error('❌ Cannot reach backend:', e);
+        console.log('Make sure:');
+        console.log('1. XAMPP Apache is running');
+        console.log('2. Files are in htdocs/lifeline_nbsc/');
+        console.log(`3. URL is accessible: ${API_BASE}test.php`);
+        return false;
+    }
+    return false;
 }
 
-// Initialize event listeners
+// Initialize all event listeners
 function init() {
-  loadUsersFromStorage();
-  checkSession();
-
-  // Set default active form
-  if (loginFormDiv) loginFormDiv.classList.add("active-form");
-  if (registerFormDiv) registerFormDiv.classList.remove("active-form");
-
-  // Tab button listeners
-  tabBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      switchTab(btn.getAttribute("data-tab"));
-    });
-  });
-
-  // Switch link listeners
-  const switchLinks = document.querySelectorAll(".switch-link");
-  switchLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      const target = link.getAttribute("data-switch");
-      if (target === "login") switchTab("login");
-      else if (target === "register") switchTab("register");
-    });
-  });
-
-  // Form submit listeners
-  const loginFormElement = document.getElementById("loginFormElement");
-  const registerFormElement = document.getElementById("registerFormElement");
-
-  if (loginFormElement) {
-    loginFormElement.addEventListener("submit", onLoginSubmit);
-  }
-  if (registerFormElement) {
-    registerFormElement.addEventListener("submit", onRegisterSubmit);
-  }
-
-  // Add demo hint
-  const loginContainer = document.getElementById("loginForm");
-  if (loginContainer && !document.querySelector(".demo-hint")) {
-    const demoHint = document.createElement("div");
-    demoHint.className = "demo-hint";
-    demoHint.innerHTML =
-      '<i class="fa-solid fa-flask"></i> Demo Accounts:<br> <strong>rescuelead</strong> / lifeline123 &nbsp;|&nbsp; <strong>firstresponder</strong> / rescue123';
-    loginContainer.appendChild(demoHint);
-  }
+    console.log('Initializing...');
+    testBackendConnection();
+    checkSession();
+    initTabs();
+    
+    const loginForm = document.getElementById("loginFormElement");
+    if (loginForm) {
+        loginForm.addEventListener("submit", onLoginSubmit);
+    }
+    
+    const registerForm = document.getElementById("registerFormElement");
+    if (registerForm) {
+        registerForm.addEventListener("submit", onRegisterSubmit);
+    }
 }
 
 // Run initialization when DOM is ready
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", init);
-} else {
-  init();
-}
+document.addEventListener("DOMContentLoaded", init);
